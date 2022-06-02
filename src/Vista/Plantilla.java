@@ -6,6 +6,7 @@
 package Vista;
 
 import Objetos.ObAn;
+import java.awt.Toolkit;
 
 /**
  *
@@ -25,6 +26,7 @@ public class Plantilla extends javax.swing.JFrame {
         //jPanel1.add(Objetos.ObAn.adminElegirTipoCamisa);
         
         jPanel1.add(Objetos.ObAn.login);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Imagenes/IconoBijou.jpg")));
 
     }
 
