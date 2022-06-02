@@ -1,0 +1,429 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Ventanas.admin;
+
+import Ventanas.usuario.*;
+import Ventanas.admin.*;
+import Externos.CambiarPanel;
+import ModeloTabla.*;
+import Objetos.CamisaPlayera;
+import Objetos.Carrito;
+import Objetos.ObAn;
+import Objetos.Usuario;
+import Objetos.Ventas;
+import Vista.Plantilla;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
+/**
+ *
+ * @author PC
+ */
+public class AdminVentas extends javax.swing.JPanel {
+
+    /**
+     * Creates new form AdminTec
+     */
+    int filas;
+    Usuario usuario;
+    JScrollPane scrollPaneTabla;
+    JTable tablaHistorialVentas;
+    ArrayList<Carrito> historialVentas;//lista que simula la información de la BD
+
+    public ModeloTabla modelo;//modelo definido en la clase ModeloTabla
+    //DefaultTableModel modelo2;
+    private int filasTabla;
+    private int columnasTabla;
+
+    public AdminVentas() {
+        initComponents();
+        
+        
+        /*
+        modelo2 = new DefaultTableModel();
+        modelo2.addColumn("Carrera");
+        modelo2.addColumn("Camisas manga corta");
+        modelo2.addColumn("Camisas manga larga");
+        modelo2.addColumn("Playeras");
+        
+        jTable1.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 18));
+        jTable1.getTableHeader().setOpaque(false);
+        jTable1.getTableHeader().setBackground(new Color(213,213,213));
+        jTable1.getTableHeader().setForeground(new Color(255,255,255));
+    
+        jTable1.setRowHeight(45);
+         */
+        iniciarComponentes();
+        construirTabla();
+
+        //No sirve la perra puta mediocre chingada valepapuramadre culera indulgente linea siguiente
+        tablaHistorialVentas.getTableHeader().setFont(new Font("Rammetto", Font.BOLD, 80));
+        
+        limpiarTabla();
+
+        //Cambiarel alto de las celdas
+        //tablaPersonas.setRowHeight(41);
+        //jTable1.setModel(modelo2);
+        //mostrarStock();
+    }
+
+    public void limpiarTabla() {
+        for (int i = 0; i < tablaHistorialVentas.getRowCount(); i++) {
+            modelo.removeRow(i);
+            i -= 1;
+        }
+    }
+
+    public void mostrarMisVentas() {
+        Object datos[] = new Object[10];
+        String fecha;
+        byte[] byteFoto;
+        historialVentas = new SQL.Conexion().obtenerHistorialVentas();
+        
+        for (int i = 0; i < historialVentas.size(); i++) {
+            usuario = new SQL.Conexion().obtenerDatosUsuario(historialVentas.get(i).getIdUsuario());
+            //Corroboro si la compra N tiene foto o no, es decir si en la bd hay una foto de este producto.
+            if (historialVentas.get(i).getFoto() != null) {
+                //Si si hay foto entra en este if y solamente apunto el byteFoto hacia la foto.
+                byteFoto = historialVentas.get(i).getFoto();
+            } else {
+                //Si no hay foto entonces tendre que buscarla y despues apuntar el byteFoto hacia la foto 
+                //que encuentre.
+                byteFoto = new SQL.Conexion().obtenerStockFoto(historialVentas.get(i).getEscuela(),
+                        historialVentas.get(i).getCarrera(),
+                        historialVentas.get(i).getTipo(),
+                        historialVentas.get(i).getSexo());
+            }
+            //Relleno el array.
+            datos[0] = byteToImagenEscalada(byteFoto, 200, 200, 0);
+            datos[1] = historialVentas.get(i).getDescripcion();
+            datos[2] = historialVentas.get(i).getUnidades() + "";
+            datos[3] = historialVentas.get(i).getPrecioVenta() + "";
+            datos[4] = usuario.getNombre();
+            fecha = ObAn.obtenerFecha(historialVentas.get(i).getFechaVenta());
+            datos[5] = fecha;
+            datos[6] = "Pagado";
+            modelo.addRow(datos);
+            //modelo2.addRow(datos);
+        }
+
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jButton3 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jButton3.setBorder(null);
+        jButton3.setContentAreaFilled(false);
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 650, 260, 60));
+
+        jButton1.setBorder(null);
+        jButton1.setContentAreaFilled(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 650, 230, 50));
+
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Regresar-1.png"))); // NOI18N
+        jButton2.setBorder(null);
+        jButton2.setContentAreaFilled(false);
+        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton2.setFocusPainted(false);
+        jButton2.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Regresar-2.png"))); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(19, 4, 84, 85));
+
+        jPanel1.setLayout(new java.awt.BorderLayout());
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 133, 1235, 470));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/MisCompras.png"))); // NOI18N
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        /*
+        String[] info = new String[4];
+
+        for (int i = 0; i < listaVentas.size(); i++) {
+
+            info[0] = (String) modelo.getValueAt(i, 0);
+            info[1] = (String) modelo.getValueAt(i, 1);
+            info[2] = (String) modelo.getValueAt(i, 2);
+            info[3] = (String) modelo.getValueAt(i, 3);
+            new SQL.Conexion().actualizarStock("TECNOLOGICO", Integer.parseInt(info[1]), Integer.parseInt(info[2]), Integer.parseInt(info[3]), i + 1);
+        }
+        /*
+        for (int i = 1; i < tablaPersonas.getColumnCount(); i++) {
+            modelo.setValueAt(info[0], filas, 0);
+            modelo.setValueAt(info[i], filas, i);
+            
+            //modelo2.setValueAt(info[0], filas, 0);
+            //modelo2.setValueAt(info[i], filas, i);
+        }
+         */
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        
+
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+         new CambiarPanel(Plantilla.jPanel1, ObAn.admin1);
+        limpiarTabla();
+       
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    /*
+    private void tablaPersonasMouseClicked(java.awt.event.MouseEvent evt) {
+        // TODO add your handling code here:
+        int seleccion = tablaPersonas.getSelectedRow();
+        txtFieldCamisaML.setText(jTable1.getValueAt(seleccion, 1).toString());
+        txtFieldCamisaMC.setText(jTable1.getValueAt(seleccion, 2).toString());
+        txtFieldPlayera.setText(jTable1.getValueAt(seleccion, 3).toString());
+
+    }*/
+    private void iniciarComponentes() {
+
+        scrollPaneTabla = new JScrollPane();
+        jPanel1.add(scrollPaneTabla);
+
+        tablaHistorialVentas = new JTable();
+        tablaHistorialVentas.setBackground(new Color(255, 255, 255));
+        tablaHistorialVentas.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+        //tablaPersonas.addMouseListener(this);
+        tablaHistorialVentas.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                //capturo fila o columna dependiendo de mi necesidad
+                int fila = tablaHistorialVentas.rowAtPoint(e.getPoint());
+                int columna = tablaHistorialVentas.columnAtPoint(e.getPoint());
+
+//uso la columna para valiar si corresponde a la columna de perfil garantizando
+// que solo se produzca algo si selecciono una fila de esa columna
+//
+                if (columna == Utilidades.eliminar) {
+                    //sabiendo que corresponde a la columna de perfil, envio la posicion de la fila seleccionada
+                    validarSeleccionMouse(fila, columna);
+                }
+
+            }
+        });
+        //tablaSeguimiento.addKeyListener(this);
+        tablaHistorialVentas.setOpaque(false);
+        scrollPaneTabla.setViewportView(tablaHistorialVentas);
+    }
+
+//
+//Metodo que permite construir la tabla de personas
+//se crean primero las columnas y luego se asigna la información
+//
+    private void construirTabla() {
+        
+        historialVentas = new SQL.Conexion().obtenerHistorialVentas();
+        ArrayList titulosList = new ArrayList<>();
+
+        titulosList.add("Imagen");
+        titulosList.add("Descripcion del producto");
+        titulosList.add("Cantidad");
+        titulosList.add("Precio total");
+        titulosList.add("Cliente");
+        titulosList.add("Fecha compra");
+        titulosList.add("Estado");
+        
+
+        //se asignan las columnas al arreglo para enviarse al momento de construir la tabla
+        String titulos[] = new String[titulosList.size()];
+        for (int i = 0; i < titulos.length; i++) {
+            titulos[i] = (String) titulosList.get(i);
+        }
+//obtenemos los datos de la lista y los guardamos en la matriz
+//que luego se manda a construir la tabla
+
+        Object[][] data = obtenerMatrizDatos(titulosList);
+        construirTabla(titulos, data);
+
+    }
+
+//
+//Permite simular el llenado de personas en una lista
+//que posteriormente alimentará la tabla
+//@return
+//
+//
+// Llena la información de la tabla usando la lista de personas trabajada 
+// anteriormente, guardandola en una matriz que se retorna con toda 
+// la información para luego ser asignada al modelo
+// @param titulosList
+// @return
+//
+    private Object[][] obtenerMatrizDatos(ArrayList titulosList) {
+
+//se crea la matriz donde las filas son dinamicas pues corresponde
+//a todos los usuarios, mientras que las columnas son estaticas
+// correspondiendo a las columnas definidas por defecto
+//
+        Object informacion[][] = new Object[historialVentas.size()][titulosList.size()];
+        byte [] byteFoto;
+                
+        for (int x = 0; x < informacion.length; x++) {
+            usuario = new SQL.Conexion().obtenerDatosUsuario(historialVentas.get(x).getIdUsuario());
+            //Corroboro si la compra N tiene foto o no, es decir si en la bd hay una foto de este producto.
+            if (historialVentas.get(x).getFoto() != null) {
+                //Si si hay foto entra en este if y solamente apunto el byteFoto hacia la foto.
+                byteFoto = historialVentas.get(x).getFoto();
+            } else {
+                //Si no hay foto entonces tendre que buscarla y despues apuntar el byteFoto hacia la foto 
+                //que encuentre.
+                byteFoto = new SQL.Conexion().obtenerStockFoto(historialVentas.get(x).getEscuela(),
+                        historialVentas.get(x).getCarrera(),
+                        historialVentas.get(x).getTipo(),
+                        historialVentas.get(x).getSexo());
+            }
+            //Relleno el array.
+            informacion[x][0] = byteToImagenEscalada(byteFoto, 200, 200, 0);
+            informacion[x][1] = historialVentas.get(x).getDescripcion();
+            informacion[x][2] = historialVentas.get(x).getUnidades() + "";
+            informacion[x][3] =historialVentas.get(x).getPrecioVenta() + "";
+            informacion[x][4] = usuario.getNombre();
+            informacion[x][5] = ObAn.obtenerFecha(historialVentas.get(x).getFechaVenta());
+            informacion[x][6] = "Pagado";
+        }
+
+        return informacion;
+    }
+
+//
+// Con los titulos y la información a mostrar se crea el modelo para 
+// poder personalizar la tabla, asignando tamaño de celdas tanto en ancho como en alto
+// así como los tipos de datos que va a poder soportar.
+// @param titulos
+// @param data
+//
+    private void construirTabla(String[] titulos, Object[][] data) {
+        modelo = new ModeloTabla(data, titulos);
+        //se asigna el modelo a la tabla
+
+        tablaHistorialVentas.setModel(modelo);
+
+        filasTabla = tablaHistorialVentas.getRowCount();
+        columnasTabla = tablaHistorialVentas.getColumnCount();
+
+        //se asigna el tipo de dato que tendrán las celdas de cada columna definida respectivamente para validar su personalización
+        tablaHistorialVentas.getColumnModel().getColumn(0).setCellRenderer(new GestionCeldas());
+        tablaHistorialVentas.getColumnModel().getColumn(1).setCellRenderer(new GestionCeldas("texto"));
+        tablaHistorialVentas.getColumnModel().getColumn(2).setCellRenderer(new GestionCeldas("numerico"));
+        tablaHistorialVentas.getColumnModel().getColumn(3).setCellRenderer(new GestionCeldas("numerico"));
+        tablaHistorialVentas.getColumnModel().getColumn(4).setCellRenderer(new GestionCeldas("texto"));
+        tablaHistorialVentas.getColumnModel().getColumn(5).setCellRenderer(new GestionCeldas("texto"));
+        tablaHistorialVentas.getColumnModel().getColumn(6).setCellRenderer(new GestionCeldas("texto"));
+        
+
+        tablaHistorialVentas.getTableHeader().setReorderingAllowed(false);
+        tablaHistorialVentas.setRowHeight(160);//tamaño de las celdas
+        tablaHistorialVentas.setGridColor(new java.awt.Color(238, 238, 238));
+        //Se define el tamaño de largo para cada columna y su contenido
+        tablaHistorialVentas.getColumnModel().getColumn(0).setPreferredWidth(60);//documento
+        tablaHistorialVentas.getColumnModel().getColumn(1).setPreferredWidth(300);//nombre
+        tablaHistorialVentas.getColumnModel().getColumn(2).setPreferredWidth(15);//direccion
+        tablaHistorialVentas.getColumnModel().getColumn(3).setPreferredWidth(15);//telefono
+        tablaHistorialVentas.getColumnModel().getColumn(4).setPreferredWidth(100);//telefono
+        tablaHistorialVentas.getColumnModel().getColumn(5).setPreferredWidth(90);//telefono
+        tablaHistorialVentas.getColumnModel().getColumn(6).setPreferredWidth(40);//telefono
+       
+
+        //personaliza el encabezado
+        JTableHeader jtableHeader = tablaHistorialVentas.getTableHeader();
+        jtableHeader.setDefaultRenderer(new EncabezadoTabla());
+        tablaHistorialVentas.setTableHeader(jtableHeader);
+
+        //se asigna la tabla al scrollPane
+        scrollPaneTabla.setViewportView(tablaHistorialVentas);
+
+    }
+
+    //
+// Este metodo simularia el proceso o la acción que se quiere realizar si 
+// se presiona alguno de los botones o iconos de la tabla
+// @param fila
+//
+    private void validarSeleccionMouse(int fila, int columna) {
+       
+    }
+
+    public JLabel byteToImagenEscalada(byte[] arrayByte, int ancho, int largo, int sepa) {
+        byte[] bi = arrayByte;
+        JLabel imagen;
+        BufferedImage image = null;
+        InputStream in = new ByteArrayInputStream(bi);
+        try {
+            image = ImageIO.read(in);
+            ImageIcon imgi = new ImageIcon(image.getScaledInstance(ancho, largo, sepa));
+            imagen = new JLabel(imgi);
+        } catch (IOException ex) {
+            Logger.getLogger(AdminVentas.class.getName()).log(Level.SEVERE, null, ex);
+            imagen = new JLabel("No imagen");
+        }
+        return imagen;
+    }
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    // End of variables declaration//GEN-END:variables
+}
